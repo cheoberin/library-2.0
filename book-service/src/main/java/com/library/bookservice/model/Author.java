@@ -20,13 +20,16 @@ import java.time.LocalDate;
 @Data
 public class Author {
 
-    public Author(Author author) {
-        this._id = author.get_id();
-        this.name = author.getName();
-        this.birthDate = author.getBirthDate();
-        this.nationality = author.getNationality();
-        this.description = author.getDescription();
-    }
+    @Id
+    private String _id;
+    @NotBlank
+    private String name;
+    @NotNull
+    private LocalDate birthDate;
+    @NotNull
+    private String nationality;
+    @NotBlank
+    private String description;
 
     public Author(AuthorRequest authorRequest) {
         this.name = authorRequest.name();
@@ -53,16 +56,5 @@ public class Author {
             this.description = authorUpdate.description();
         }
     }
-
-    @Id
-    private String _id;
-    @NotBlank
-    private String name;
-    @NotNull
-    private LocalDate birthDate;
-    @NotNull
-    private String nationality;
-    @NotBlank
-    private String description;
 
 }

@@ -19,15 +19,18 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class Genre {
 
+    @Id
+    private String _id;
+
+    @NotBlank
+    @Indexed(unique = true)
+    private String name;
+    @NotBlank
+    private String description;
+
     public Genre(GenreRequest genreRequest) {
         this.name = genreRequest.name();
         this.description = genreRequest.description();
-    }
-
-    public Genre(Genre genre) {
-        this._id = genre.get_id();
-        this.name = genre.getName();
-        this.description = genre.getDescription();
     }
 
     public void update(GenreUpdate genreUpdate) {
@@ -44,13 +47,4 @@ public class Genre {
             this.description = genreUpdate.description();
         }
     }
-
-    @Id
-    private String _id;
-
-    @NotBlank
-    @Indexed(unique = true)
-    private String name;
-    private String description;
-
 }

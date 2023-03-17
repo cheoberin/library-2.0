@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -22,7 +21,7 @@ public class PublisherService {
     private final PublisherRepository publisherRepository;
 
     public PublisherDetails save(PublisherRequest publisherRequest) {
-        Publisher publisher = new @Valid Publisher(publisherRequest);
+        Publisher publisher = new Publisher(publisherRequest);
         PublisherDetails publisherDetails = new PublisherDetails(publisherRepository.save(publisher));
         log.info("Publisher saved: {} - {}", publisherDetails._id(), publisherDetails.name());
         return publisherDetails;
@@ -49,8 +48,7 @@ public class PublisherService {
     public PublisherDetails update(PublisherUpdate publisherUpdate) {
         Publisher publisher = publisherRepository.findById(publisherUpdate._id()).orElseThrow(() -> new NotFoundException("Object not Found: " + publisherUpdate._id() + " , type: " + PublisherUpdate.class.getName()));
         publisher.update(publisherUpdate);
-        Publisher validPublisher = new @Valid Publisher(publisher);
-        publisherRepository.save(validPublisher);
+        publisherRepository.save(publisher);
         log.info("Publisher updated, id: " + publisher.get_id());
         return new PublisherDetails(publisher);
     }

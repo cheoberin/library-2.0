@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -22,7 +21,7 @@ public class GenreService {
     private final GenreRepository genreRepository;
 
     public GenreDetails save(GenreRequest genreRequest) {
-        Genre genre = new @Valid Genre(genreRequest);
+        Genre genre = new Genre(genreRequest);
         GenreDetails genreDetails = new GenreDetails(genreRepository.save(genre));
         log.info("Genre saved: {} - {}", genreDetails._id(), genreDetails.name());
         return genreDetails;
@@ -49,8 +48,7 @@ public class GenreService {
     public GenreDetails update(GenreUpdate genreUpdate) {
         Genre genre = genreRepository.findById(genreUpdate._id()).orElseThrow(() -> new NotFoundException("Object not Found: " + genreUpdate._id() + " , type: " + Genre.class.getName()));
         genre.update(genreUpdate);
-        Genre validGenre = new @Valid Genre(genre);
-        genreRepository.save(validGenre);
+        genreRepository.save(genre);
         log.info("Genre updated, id: " + genre.get_id());
         return new GenreDetails(genre);
     }

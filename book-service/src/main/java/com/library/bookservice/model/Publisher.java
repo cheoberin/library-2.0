@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @Document(value = "publisher")
@@ -19,15 +20,17 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class Publisher {
 
-    public Publisher(PublisherRequest publisherRequest) {
+    @Id
+    private String _id;
+    @NotBlank
+    @Indexed(unique = true)
+    private String name;
+    @NotBlank
+    private String description;
+
+    public Publisher(@Valid PublisherRequest publisherRequest) {
         this.name = publisherRequest.name();
         this.description = publisherRequest.description();
-    }
-
-    public Publisher(Publisher publisher) {
-        this._id = publisher.get_id();
-        this.name = publisher.getName();
-        this.description = publisher.getDescription();
     }
 
     public void update(PublisherUpdate publisherUpdate) {
@@ -44,12 +47,4 @@ public class Publisher {
             this.description = publisherUpdate.description();
         }
     }
-
-    @Id
-    private String _id;
-    @NotBlank
-    @Indexed(unique = true)
-    private String name;
-    @NotBlank
-    private String description;
 }

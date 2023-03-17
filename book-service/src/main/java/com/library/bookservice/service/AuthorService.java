@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -22,7 +21,7 @@ public class AuthorService {
     private final AuthorRepository authorRepository;
 
     public AuthorDetails save(AuthorRequest authorRequest) {
-        Author author = new @Valid Author(authorRequest);
+        Author author = new Author(authorRequest);
         AuthorDetails authorDetails = new AuthorDetails(authorRepository.save(author));
         log.info("Author saved: {} - {}", authorDetails._id(), authorDetails.name());
         return authorDetails;
@@ -49,8 +48,7 @@ public class AuthorService {
     public AuthorDetails update(AuthorUpdate authorUpdate) {
         Author author = authorRepository.findById(authorUpdate._id()).orElseThrow(() -> new NotFoundException("Object not found: " + authorUpdate._id() + ", type: " + Author.class.getName()));
         author.update(authorUpdate);
-        Author validAuthor = new @Valid Author(author);
-        authorRepository.save(validAuthor);
+        authorRepository.save(author);
         log.info("Author updated, id: " + author.get_id());
         return new AuthorDetails(author);
     }

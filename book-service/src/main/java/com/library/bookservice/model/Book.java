@@ -20,6 +20,33 @@ import java.util.List;
 @Data
 public class Book {
 
+    @Id
+    private String _id;
+    @NotBlank
+    @Indexed(unique = true)
+    private String name;
+    @DBRef
+    @ToString.Exclude
+    private List<Author> authors;
+    @NotNull
+    private int pages;
+    @DBRef
+    @ToString.Exclude
+    private List<Genre> genres;
+    @NotNull
+    private int publicationYear;
+    @NotBlank
+    private String asin;
+    @NotBlank
+    private String summary;
+    @DBRef
+    @ToString.Exclude
+    private Publisher publisher;
+    @NotBlank
+    private String bookCover;
+    @NotNull
+    private BigDecimal price;
+
     public Book(BookRequest bookRequest) {
         this.name = bookRequest.name();
         this.authors = bookRequest.authors();
@@ -31,20 +58,6 @@ public class Book {
         this.publisher = bookRequest.publisher();
         this.bookCover = bookRequest.bookCover();
         this.price = bookRequest.price();
-    }
-
-    public Book(Book book) {
-        this._id = book.get_id();
-        this.name = book.getName();
-        this.authors = book.getAuthors();
-        this.pages = book.getPages();
-        this.genres = book.getGenres();
-        this.publicationYear = book.getPublicationYear();
-        this.asin = book.getAsin();
-        this.summary = book.getSummary();
-        this.publisher = book.getPublisher();
-        this.bookCover = book.getBookCover();
-        this.price = book.getPrice();
     }
 
     public void update(BookUpdate bookUpdate) {
@@ -93,31 +106,4 @@ public class Book {
             this.price = bookUpdate.price();
         }
     }
-
-    @Id
-    private String _id;
-    @NotBlank
-    @Indexed(unique = true)
-    private String name;
-    @DBRef
-    @ToString.Exclude
-    private List<Author> authors;
-    @NotNull
-    private int pages;
-    @DBRef
-    @ToString.Exclude
-    private List<Genre> genres;
-    @NotNull
-    private int publicationYear;
-    @NotBlank
-    private String asin;
-    @NotBlank
-    private String summary;
-    @DBRef
-    @ToString.Exclude
-    private Publisher publisher;
-    @NotBlank
-    private String bookCover;
-    @NotNull
-    private BigDecimal price;
 }
