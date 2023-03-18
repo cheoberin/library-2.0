@@ -2,6 +2,8 @@ package com.library.bookservice.model;
 
 import com.library.bookservice.dto.PublisherRequest;
 import com.library.bookservice.dto.PublisherUpdate;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,9 +11,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 @Document(value = "publisher")
 @AllArgsConstructor

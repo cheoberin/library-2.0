@@ -1,6 +1,6 @@
 package com.library.bookservice.dto;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 public record PublisherUpdate(
         @NotBlank String _id,

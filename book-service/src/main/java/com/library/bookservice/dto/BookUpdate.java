@@ -3,8 +3,8 @@ package com.library.bookservice.dto;
 import com.library.bookservice.model.Author;
 import com.library.bookservice.model.Genre;
 import com.library.bookservice.model.Publisher;
+import jakarta.validation.constraints.NotBlank;
 
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.List;
 

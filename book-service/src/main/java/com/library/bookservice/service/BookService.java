@@ -7,8 +7,10 @@ import com.library.bookservice.dto.BookUpdate;
 import com.library.bookservice.exceptions.NotFoundException;
 import com.library.bookservice.model.Book;
 import com.library.bookservice.repository.BookRepository;
+import com.mongodb.MongoWriteException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +21,21 @@ import java.util.List;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final int DUPLICATE_ERROR_CODE = 11000;
 
     public BookDetails save(BookRequest bookRequest) {
         Book book = new Book(bookRequest);
-        BookDetails bookDetails = new BookDetails(bookRepository.save(book));
-        log.info("Book saved: {} - {}", bookDetails._id(), bookDetails.name());
+        BookDetails bookDetails = null;
+
+        try {
+            bookDetails = new BookDetails(bookRepository.save(book));
+            log.info("Book saved: {} - {}", bookDetails._id(), bookDetails.name());
+        } catch (MongoWriteException exception) {
+            if (exception.getError().getCode() == DUPLICATE_ERROR_CODE) {
+                throw new DuplicateKeyException("Duplicate Field: " + exception.getMessage(), exception);
+            }
+        }
+
         return bookDetails;
     }
 
@@ -48,8 +60,16 @@ public class BookService {
     public BookDetails update(BookUpdate bookUpdate) {
         Book book = bookRepository.findById(bookUpdate._id()).orElseThrow(() -> new NotFoundException("Object not Found: " + bookUpdate._id() + " , type: " + Book.class.getName()));
         book.update(bookUpdate);
-        bookRepository.save(book);
-        log.info("Book updated, id: " + book.get_id());
+
+        try {
+            bookRepository.save(book);
+            log.info("Book updated, id: " + book.get_id());
+        } catch (MongoWriteException exception) {
+            if (exception.getError().getCode() == DUPLICATE_ERROR_CODE) {
+                throw new DuplicateKeyException("Duplicate Field: " + exception.getMessage(), exception);
+            }
+        }
+
         return new BookDetails(book);
     }
 }

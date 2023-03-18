@@ -13,7 +13,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="book-service" target="16" />
+      <module name="book-service" target="17" />
       <module name="discovery-server" target="11" />
       <module name="order-service" target="11" />
     </bytecodeTargetLevel>

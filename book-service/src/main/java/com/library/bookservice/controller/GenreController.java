@@ -6,12 +6,12 @@ import com.library.bookservice.dto.GenreRequest;
 import com.library.bookservice.dto.GenreResponse;
 import com.library.bookservice.dto.GenreUpdate;
 import com.library.bookservice.service.GenreService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 

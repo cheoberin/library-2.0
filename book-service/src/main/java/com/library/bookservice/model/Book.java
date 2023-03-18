@@ -2,15 +2,16 @@ package com.library.bookservice.model;
 
 import com.library.bookservice.dto.BookRequest;
 import com.library.bookservice.dto.BookUpdate;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(value = "book")
@@ -27,12 +28,12 @@ public class Book {
     private String name;
     @DBRef
     @ToString.Exclude
-    private List<Author> authors;
+    private List<Author> authors = new ArrayList<>();
     @NotNull
     private int pages;
     @DBRef
     @ToString.Exclude
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
     @NotNull
     private int publicationYear;
     @NotBlank

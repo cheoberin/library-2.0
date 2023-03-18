@@ -7,8 +7,10 @@ import com.library.bookservice.dto.GenreUpdate;
 import com.library.bookservice.exceptions.NotFoundException;
 import com.library.bookservice.model.Genre;
 import com.library.bookservice.repository.GenreRepository;
+import com.mongodb.MongoWriteException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +21,20 @@ import java.util.List;
 public class GenreService {
 
     private final GenreRepository genreRepository;
+    private final int DUPLICATE_ERROR_CODE = 11000;
 
     public GenreDetails save(GenreRequest genreRequest) {
         Genre genre = new Genre(genreRequest);
-        GenreDetails genreDetails = new GenreDetails(genreRepository.save(genre));
-        log.info("Genre saved: {} - {}", genreDetails._id(), genreDetails.name());
+        GenreDetails genreDetails = null;
+        try {
+            genreDetails = new GenreDetails(genreRepository.save(genre));
+            log.info("Genre saved: {} - {}", genreDetails._id(), genreDetails.name());
+
+        } catch (MongoWriteException exception) {
+            if (exception.getError().getCode() == DUPLICATE_ERROR_CODE) {
+                throw new DuplicateKeyException("Duplicate Field: " + exception.getMessage(), exception);
+            }
+        }
         return genreDetails;
     }
 
@@ -48,8 +59,14 @@ public class GenreService {
     public GenreDetails update(GenreUpdate genreUpdate) {
         Genre genre = genreRepository.findById(genreUpdate._id()).orElseThrow(() -> new NotFoundException("Object not Found: " + genreUpdate._id() + " , type: " + Genre.class.getName()));
         genre.update(genreUpdate);
-        genreRepository.save(genre);
-        log.info("Genre updated, id: " + genre.get_id());
+        try {
+            genreRepository.save(genre);
+            log.info("Genre updated, id: " + genre.get_id());
+        } catch (MongoWriteException exception) {
+            if (exception.getError().getCode() == DUPLICATE_ERROR_CODE) {
+                throw new DuplicateKeyException("Duplicate Field: " + exception.getMessage(), exception);
+            }
+        }
         return new GenreDetails(genre);
     }
 }

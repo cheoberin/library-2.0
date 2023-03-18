@@ -2,6 +2,7 @@ package com.library.bookservice.model;
 
 import com.library.bookservice.dto.GenreRequest;
 import com.library.bookservice.dto.GenreUpdate;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.validation.constraints.NotBlank;
 
 @Document(value = "genre")
 @AllArgsConstructor

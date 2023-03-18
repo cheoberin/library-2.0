@@ -1,6 +1,7 @@
 package com.library.bookservice.dto;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
 
 public record AuthorUpdate(

@@ -5,12 +5,12 @@ import com.library.bookservice.dto.AuthorRequest;
 import com.library.bookservice.dto.AuthorResponse;
 import com.library.bookservice.dto.AuthorUpdate;
 import com.library.bookservice.service.AuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
