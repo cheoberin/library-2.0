@@ -22,9 +22,7 @@ public class AddressService {
 
     public AddressDetails save(AddressRequest addressRequest) {
         Address address = new Address(addressRequest);
-        AddressDetails addressDetails = null;
-
-        addressDetails = new AddressDetails(addressRepository.save(address));
+        AddressDetails addressDetails = new AddressDetails(addressRepository.save(address));
         log.info("Address saved: {} - {}, {}", addressDetails._id(), addressDetails.cep(), addressDetails.number());
 
         return addressDetails;
@@ -32,7 +30,6 @@ public class AddressService {
     }
 
     public List<AddressResponse> findAll() {
-
         List<Address> addresses = addressRepository.findAll();
         log.info("Address list returned");
         return addresses.stream().map(AddressResponse::new).toList();
