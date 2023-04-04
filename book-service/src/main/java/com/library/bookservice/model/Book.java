@@ -2,6 +2,7 @@ package com.library.bookservice.model;
 
 import com.library.bookservice.dto.BookRequest;
 import com.library.bookservice.dto.BookUpdate;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -61,11 +62,7 @@ public class Book {
         this.price = bookRequest.price();
     }
 
-    public void update(BookUpdate bookUpdate) {
-
-        if (bookUpdate._id() != null) {
-            this._id = bookUpdate._id();
-        }
+    public void update(@Valid BookUpdate bookUpdate) {
 
         if (bookUpdate.name() != null) {
             this.name = bookUpdate.name();
