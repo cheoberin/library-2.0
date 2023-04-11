@@ -17,13 +17,13 @@ public class BookServiceApplication {
 		SpringApplication.run(BookServiceApplication.class, args);
 	}
 
-	@Autowired
+	/*@Autowired
 	private DbService dbService;
 
 	@Bean
 	public void initDB(){
 		this.dbService.initDataBaseTest();
 	}
-
+*/
 
 }
