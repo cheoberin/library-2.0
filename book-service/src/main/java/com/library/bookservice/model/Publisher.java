@@ -32,11 +32,7 @@ public class Publisher {
         this.description = publisherRequest.description();
     }
 
-    public void update(PublisherUpdate publisherUpdate) {
-
-        if (publisherUpdate._id() != null) {
-            this._id = publisherUpdate._id();
-        }
+    public void update(@Valid PublisherUpdate publisherUpdate) {
 
         if (publisherUpdate.name() != null) {
             this.name = publisherUpdate.name();

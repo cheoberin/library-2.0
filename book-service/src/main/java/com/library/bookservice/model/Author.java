@@ -2,6 +2,7 @@ package com.library.bookservice.model;
 
 import com.library.bookservice.dto.AuthorRequest;
 import com.library.bookservice.dto.AuthorUpdate;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -40,21 +41,21 @@ public class Author {
         this.description = authorRequest.description();
     }
 
-    public void update(AuthorUpdate authorUpdate) {
+    public void update(@Valid AuthorUpdate authorUpdate) {
 
-        if (authorUpdate._id() != null) {
+        if (authorUpdate.name() != null) {
             this.name = authorUpdate.name();
         }
 
-        if (authorUpdate._id() != null) {
+        if (authorUpdate.birthDate() != null) {
             this.birthDate = authorUpdate.birthDate();
         }
 
-        if (authorUpdate._id() != null) {
+        if (authorUpdate.nationality() != null) {
             this.nationality = authorUpdate.nationality();
         }
 
-        if (authorUpdate._id() != null) {
+        if (authorUpdate.description() != null) {
             this.description = authorUpdate.description();
         }
     }

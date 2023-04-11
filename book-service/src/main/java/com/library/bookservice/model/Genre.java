@@ -2,6 +2,7 @@ package com.library.bookservice.model;
 
 import com.library.bookservice.dto.GenreRequest;
 import com.library.bookservice.dto.GenreUpdate;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,11 +33,7 @@ public class Genre {
         this.description = genreRequest.description();
     }
 
-    public void update(GenreUpdate genreUpdate) {
-
-        if (genreUpdate._id() != null) {
-            this._id = genreUpdate._id();
-        }
+    public void update(@Valid GenreUpdate genreUpdate) {
 
         if (genreUpdate.name() != null) {
             this.name = genreUpdate.name();
