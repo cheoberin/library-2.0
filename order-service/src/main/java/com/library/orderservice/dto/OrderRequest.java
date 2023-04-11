@@ -14,6 +14,8 @@ public record OrderRequest(
         @NotBlank
         String customerName,
         @NotBlank
+        String status,
+        @NotBlank
         String phone,
         @NotNull
         @Valid

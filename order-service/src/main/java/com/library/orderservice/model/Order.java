@@ -21,9 +21,10 @@ public class Order {
     private String _id;
     @NotBlank
     private String customerId;
-
     @NotBlank
     private String customerName;
+    @NotBlank
+    private String status;
     @NotBlank
     private String phone;
     @NotNull
@@ -37,5 +38,9 @@ public class Order {
         this.phone = orderRequest.phone();
         this.address = orderRequest.address();
         this.orderBookList = orderRequest.orderBookList();
+    }
+
+    public void update(){
+
     }
 }
