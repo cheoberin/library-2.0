@@ -1,5 +1,6 @@
 package com.library.bookservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.library.bookservice.dto.AuthorRequest;
 import com.library.bookservice.dto.AuthorUpdate;
 import jakarta.validation.Valid;
@@ -28,6 +29,7 @@ public class Author {
     @Indexed(unique = true)
     private String name;
     @NotNull
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate birthDate;
     @NotNull
     private String nationality;

@@ -10,6 +10,7 @@ import com.library.bookservice.repository.PublisherRepository;
 import com.mongodb.MongoWriteException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @Slf4j
 public class PublisherService {
 
+    @Autowired
     private final PublisherRepository publisherRepository;
     private final int DUPLICATE_ERROR_CODE = 11000;
 
