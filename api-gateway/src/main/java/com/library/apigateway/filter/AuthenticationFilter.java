@@ -1,15 +1,21 @@
 package com.library.apigateway.filter;
 
 import com.library.apigateway.util.JwtUtil;
+
+import jakarta.ws.rs.core.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Component
@@ -54,7 +60,11 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }catch (Exception e){
                     ServerHttpResponse response = exchange.getResponse();
                     response.setStatusCode(HttpStatus.FORBIDDEN);
-                    return response.setComplete();
+                    String errorMessage = "Erro de autenticação: " + e.getMessage();
+                    byte[] errorBytes = errorMessage.getBytes(StandardCharsets.UTF_8);
+                    DataBuffer buffer = response.bufferFactory().wrap(errorBytes);
+                    response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                    return response.writeWith(Mono.just(buffer));
                 }
 
                 var roles  = jwtUtil.getRoles(token);
