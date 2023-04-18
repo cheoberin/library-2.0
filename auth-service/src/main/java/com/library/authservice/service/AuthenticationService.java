@@ -27,12 +27,16 @@ public class AuthenticationService {
 
         var user = User.builder()
                 .name(request.getName())
-                .username(request.getUsername())
+                .birthDate(request.getBirthDate())
+                .cpf(request.getCpf())
+                .email(request.getEmail())
+                .phone(request.getPhone())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(List.of(role))
                 .build();
 
         userRepository.save(user);
+
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()
@@ -44,11 +48,11 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
+                        request.getEmail(),
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByUsername(request.getUsername())
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found in the database"));
 
         var jwtToken = jwtService.generateToken(user);

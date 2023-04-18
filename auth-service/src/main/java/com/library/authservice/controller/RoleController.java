@@ -30,7 +30,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/addtouser")
     public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
+        userService.addRoleToUser(form.getEmail(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
 

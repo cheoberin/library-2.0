@@ -44,7 +44,7 @@ public class UserServiceImp implements UserService {
         userOriginal.setPassword(user.getPassword());
         userOriginal.setName(user.getName());
         userOriginal.setRoles(user.getRoles());
-        userOriginal.setUsername(user.getUsername());
+        userOriginal.setEmail(user.getEmail());
         return userRepository.save(userOriginal);
     }
 
@@ -53,7 +53,7 @@ public class UserServiceImp implements UserService {
     public void addRoleToUser(String username, String roleName) {
 
         log.info("Adding role {} to user {}", roleName, username);
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found in the database"));
 
         Role role = roleRepository.findByName(roleName);
@@ -64,7 +64,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User getUser(String username) {
-       Optional<User> user = userRepository.findByUsername(username);
+       Optional<User> user = userRepository.findByEmail(username);
 
        return user.orElseThrow(() -> new UsernameNotFoundException("User not found in the database"));
     }
