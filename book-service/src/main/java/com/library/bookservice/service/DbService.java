@@ -34,8 +34,6 @@ public class DbService {
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
         this.publisherRepository = publisherRepository;
-//        this.userRepository = userRepository;
-//        this.userRepository = userRepository;
     }
 
 
@@ -74,6 +72,8 @@ public class DbService {
         genreRepository.saveAll(List.of(genre1, genre2, genre3));
         publisherRepository.saveAll(List.of(publisher1, publisher2));
         bookRepository.saveAll(List.of(book1));
+
+
 
     }
 

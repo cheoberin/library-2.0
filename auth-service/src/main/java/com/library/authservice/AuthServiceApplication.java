@@ -12,4 +12,11 @@ public class AuthServiceApplication {
         SpringApplication.run(AuthServiceApplication.class, args);
     }
 
+   /*@Autowired
+    private DbService dbService;
+    @Bean
+    public void initDb() {
+        dbService.dbinit();
+
+    }*/
 }

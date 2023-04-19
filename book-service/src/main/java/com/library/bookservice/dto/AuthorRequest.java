@@ -10,7 +10,7 @@ public record AuthorRequest(
         @NotBlank
         String name,
         @NotNull
-        @JsonFormat(pattern="yyyy-MM-dd")
+        @JsonFormat(pattern="yyyy/MM/dd")
         LocalDate birthDate,
         @NotBlank
         String nationality,

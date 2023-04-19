@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -33,11 +34,6 @@ public class BookController {
         return ResponseEntity.created(uri).body(bookDetails);
     }
 
-    @GetMapping
-    public ResponseEntity<List<BookResponse>> findAll() {
-        List<BookResponse> books = bookService.findAll();
-        return ResponseEntity.ok().body(books);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BookDetails> delete(@PathVariable String id) {
@@ -46,8 +42,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable String id) {
-        log.info(id);
+    public ResponseEntity<BookDetails> findById(@PathVariable String id) {
         BookDetails bookDetails = bookService.findById(id);
         return ResponseEntity.ok().body(bookDetails);
     }
@@ -56,6 +51,19 @@ public class BookController {
     public ResponseEntity<BookDetails> update(@RequestBody @Valid BookUpdate bookUpdate) {
         BookDetails bookDetails = bookService.update(bookUpdate);
         return ResponseEntity.ok().body(bookDetails);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<BookResponse>> findByFilters(@RequestParam(required = false) List<String> authorIds,
+                                                            @RequestParam(required = false) List<String> genreIds,
+                                                            @RequestParam(required = false) List<String> publisherIds,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size,
+                                                            @RequestParam(defaultValue = "name") String sortBy,
+                                                            @RequestParam(defaultValue = "desc") String sortDirection){
+
+        Page<BookResponse> books = bookService.findByFilters(authorIds, genreIds, publisherIds, page, size,sortBy,sortDirection);
+        return ResponseEntity.ok().body(books);
     }
 
 }

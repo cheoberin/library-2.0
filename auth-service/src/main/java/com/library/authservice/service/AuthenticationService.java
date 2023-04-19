@@ -1,5 +1,6 @@
 package com.library.authservice.service;
 
+import com.library.authservice.exceptions.ObjectNotFoundException;
 import com.library.authservice.model.*;
 import com.library.authservice.repository.RoleRepository;
 import com.library.authservice.repository.UserRepository;
@@ -23,7 +24,9 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     public AuthenticationResponse register(RegisterRequest request) {
 
-        Role role = roleRepository.findByName(ROLE_NAME);
+        Role role = roleRepository.findByName(ROLE_NAME).orElseThrow(
+                () -> new ObjectNotFoundException("Role not found")
+        );
 
         var user = User.builder()
                 .name(request.getName())

@@ -1,5 +1,6 @@
 package com.library.authservice.controller;
 
+import com.library.authservice.dto.UserResponse;
 import com.library.authservice.model.User;
 import com.library.authservice.service.UserService;
 import jakarta.validation.Valid;
@@ -17,11 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
-
     private final UserService userService;
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'ADMIN', 'EMPLOYEE')")
     @GetMapping("/list")
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<UserResponse>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
@@ -32,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping("/save")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
@@ -41,19 +42,18 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'ADMIN', 'EMPLOYEE')")
     @GetMapping("/getUser/{username}")
-    public ResponseEntity<User> getUser(@PathVariable String username) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.getUser(username));
+    public ResponseEntity<UserResponse> getUser(@PathVariable String username) {
+        return ResponseEntity.ok().body(userService.getUser(username));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PutMapping
     public ResponseEntity<User> update(@Valid @RequestBody User newUser) {
         User user = userService.updateUser(newUser);
         return ResponseEntity.ok().body(user);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @DeleteMapping("/delete/{username}")
     public ResponseEntity<User> deleteUser(@PathVariable String username) {
         userService.deleteUser(username);

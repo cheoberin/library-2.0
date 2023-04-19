@@ -1,5 +1,7 @@
 package com.library.authservice.service;
 
+import com.library.authservice.dto.UserResponse;
+import com.library.authservice.exceptions.DataViolationException;
 import com.library.authservice.exceptions.ObjectNotFoundException;
 import com.library.authservice.model.Role;
 import com.library.authservice.model.User;
@@ -29,13 +31,21 @@ public class UserServiceImp implements UserService {
     public User saveUser(User user) {
         log.info("Saving new user {} to the database...", user.getName());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        }catch (Exception e){
+            throw new DataViolationException(e.getMessage());
+        }
     }
 
     @Override
     public Role saveRole(Role role) {
         log.info("Saving new role {} to the database...", role.getName());
-        return roleRepository.save(role);
+        try {
+            return roleRepository.save(role);
+        }catch (Exception e){
+            throw new DataViolationException(e.getMessage());
+        }
     }
 
     @Override
@@ -56,17 +66,23 @@ public class UserServiceImp implements UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found in the database"));
 
-        Role role = roleRepository.findByName(roleName);
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new UsernameNotFoundException("Role not found in the database"));
 
-        user.getRoles().add(role);
-        userRepository.save(user);
+        try {
+            user.getRoles().add(role);
+            userRepository.save(user);
+
+        }catch (Exception e){
+            throw new DataViolationException(e.getMessage());
+        }
     }
 
     @Override
-    public User getUser(String username) {
-       Optional<User> user = userRepository.findByUsername(username);
-
-       return user.orElseThrow(() -> new UsernameNotFoundException("User not found in the database"));
+    public UserResponse getUser(String username) {
+       User user = userRepository.findByUsername(username)
+               .orElseThrow(() -> new UsernameNotFoundException("User not found in the database"));
+       return new UserResponse(user);
     }
 
 
@@ -78,9 +94,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<UserResponse> getUsers() {
         log.info("Fetching all users");
-        return userRepository.findAll();
+        return userRepository.findAll().stream().map(UserResponse::new).toList();
     }
 
     @Override
@@ -90,14 +106,18 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void deleteUser(String username) {
-        User user = this.getUser(username);
-        userRepository.delete(user);
-        log.info("Role {} deleted", username);
+        UserResponse user = this.getUser(username);
+        userRepository.deleteById(user._id());
+        log.info("User {} deleted", username);
     }
 
     @Override
     public void deleteRole(String roleName) {
-        Role role = roleRepository.findByName(roleName);
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new UsernameNotFoundException("Role not found in the database"));
+        if(userRepository.existsByRoles(List.of(role))){
+            throw new DataViolationException("Cannot delete a role that is assigned to one or more users");
+        }
         roleRepository.delete(role);
         log.info("Role {} deleted", roleName);
     }

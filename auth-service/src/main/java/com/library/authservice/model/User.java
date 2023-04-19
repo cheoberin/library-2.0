@@ -1,5 +1,7 @@
 package com.library.authservice.model;
 
+
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +27,10 @@ public class User implements UserDetails {
 
     @Id
     private String _id;
+
     private String name;
     @Indexed(unique = true)
+    @Email
     private String username;
     private String password;
     @DBRef

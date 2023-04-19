@@ -20,7 +20,7 @@ public class BookServiceApplication {
 	@Bean
 	public void initDB(){
 		this.dbService.initDataBaseTest();
-	}
-*/
+	}*/
+
 
 }

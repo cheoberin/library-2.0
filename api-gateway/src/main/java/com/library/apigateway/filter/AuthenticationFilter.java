@@ -1,7 +1,6 @@
 package com.library.apigateway.filter;
 
 import com.library.apigateway.util.JwtUtil;
-
 import jakarta.ws.rs.core.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -24,10 +23,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String ROLE_EMPLOYEE = "EMPLOYEE";
     private static final String ROLE_ADMIN = "ADMIN";
-    private static final String ROLE_CUSTUMER = "CUSTOMER";
-    private static final List<String> ROLES_CUSTUMER_EMPLOYEE_ADMIN = List.of(ROLE_CUSTUMER,ROLE_ADMIN,ROLE_EMPLOYEE);
-    private static final List<String> ROLES_CUSTUMER_EMPLOYEE = List.of(ROLE_CUSTUMER,ROLE_EMPLOYEE);
-    private static final List<String> ROLES_CUSTUMER_ONLY = List.of(ROLE_CUSTUMER);
+    private static final String ROLE_CUSTOMER = "CUSTOMER";
+    private static final List<String> ROLES_CUSTUMER_EMPLOYEE_ADMIN = List.of(ROLE_CUSTOMER ,ROLE_ADMIN,ROLE_EMPLOYEE);
+    private static final List<String> ROLES_CUSTUMER_EMPLOYEE = List.of(ROLE_CUSTOMER ,ROLE_EMPLOYEE);
+    private static final List<String> ROLES_CUSTOMER_ONLY = List.of(ROLE_CUSTOMER );
     private static final List<String> ROLES_EMPLOYEE_ADMIN = List.of(ROLE_ADMIN,ROLE_EMPLOYEE);
 
     @Autowired
@@ -39,7 +38,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         super(Config.class);
     }
 
-
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
@@ -48,15 +46,18 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
                 if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
                     ServerHttpResponse response = exchange.getResponse();
-                    response.setStatusCode(HttpStatus.UNAUTHORIZED);
-                    return response.setComplete();
+                    response.setStatusCode(HttpStatus.FORBIDDEN);
+                    String errorMessage = "Erro de autenticação: " + "Nenhum token presente";
+                    byte[] errorBytes = errorMessage.getBytes(StandardCharsets.UTF_8);
+                    DataBuffer buffer = response.bufferFactory().wrap(errorBytes);
+                    response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                    return response.writeWith(Mono.just(buffer));
                 }
 
                 String token = authorizationHeader.substring(BEARER_PREFIX.length());
 
                 try{
                     jwtUtil.validateToken(token);
-
                 }catch (Exception e){
                     ServerHttpResponse response = exchange.getResponse();
                     response.setStatusCode(HttpStatus.FORBIDDEN);
@@ -85,19 +86,19 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
 
                 if (exchange.getRequest().getPath().toString().equals("/api/orderbook")) {
-                    hasRole = CollectionUtils.containsAny(roles, ROLES_CUSTUMER_ONLY);
+                    hasRole = CollectionUtils.containsAny(roles, ROLES_CUSTOMER_ONLY);
                 }
-
 
                 if(!hasRole){
                     ServerHttpResponse response = exchange.getResponse();
                     response.setStatusCode(HttpStatus.FORBIDDEN);
-                    return response.setComplete();
+                    String errorMessage = "Erro de autenticação: " + "Role não autorizada";
+                    byte[] errorBytes = errorMessage.getBytes(StandardCharsets.UTF_8);
+                    DataBuffer buffer = response.bufferFactory().wrap(errorBytes);
+                    response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                    return response.writeWith(Mono.just(buffer));
                 }
-
-
             }
-
             return chain.filter(exchange);
         });
     }
