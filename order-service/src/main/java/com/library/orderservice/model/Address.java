@@ -39,6 +39,7 @@ public class Address {
     private String uf;
 
     public Address(@Valid AddressRequest addressRequest) {
+        this.userId = addressRequest.userID();
         this.addressName = addressRequest.addressName();
         this.cep = addressRequest.cep();
         this.street = addressRequest.street();
