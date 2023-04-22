@@ -36,7 +36,6 @@ public class User implements UserDetails {
     private Date birthDate;
     @NotBlank
     @CPF
-    @Indexed(unique = true)
     private String cpf;
     @NotBlank
     private String phone;

@@ -10,7 +10,7 @@ public record AddressUpdate(
         String cep,
         String street,
         String adjunct,
-        int number,
+        String number,
         String district,
         String city,
         String uf

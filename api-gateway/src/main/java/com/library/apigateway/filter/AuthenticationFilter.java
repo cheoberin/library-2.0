@@ -89,6 +89,8 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     hasRole = CollectionUtils.containsAny(roles, ROLES_CUSTOMER_ONLY);
                 }
 
+
+
                 if(!hasRole){
                     ServerHttpResponse response = exchange.getResponse();
                     response.setStatusCode(HttpStatus.FORBIDDEN);

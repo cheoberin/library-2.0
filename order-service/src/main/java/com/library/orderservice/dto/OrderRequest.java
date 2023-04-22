@@ -1,7 +1,5 @@
 package com.library.orderservice.dto;
 
-import com.library.orderservice.model.Address;
-import com.library.orderservice.model.OrderBook;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,10 +16,9 @@ public record OrderRequest(
         @NotBlank
         String phone,
         @NotNull
-        @Valid
-        Address address,
+        String addressId,
         @Valid
         @NotNull
-        List<OrderBook> orderBookList
+        List<OrderItemsDto> orderItemsList
 ) {
 }

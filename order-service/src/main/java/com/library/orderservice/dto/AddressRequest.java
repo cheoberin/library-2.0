@@ -6,12 +6,14 @@ public record AddressRequest(
         @NotBlank
         String addressName,
         @NotBlank
+        String userId,
+        @NotBlank
         String cep,
         @NotBlank
         String street,
         String adjunct,
         @NotBlank
-        int number,
+        String number,
         @NotBlank
         String district,
         @NotBlank

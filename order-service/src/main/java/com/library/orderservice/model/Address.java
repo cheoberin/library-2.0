@@ -30,7 +30,7 @@ public class Address {
     private String street;
     private String adjunct;
     @NotBlank
-    private int number;
+    private String number;
     @NotBlank
     private String district;
     @NotBlank
@@ -40,6 +40,7 @@ public class Address {
 
     public Address(@Valid AddressRequest addressRequest) {
         this.addressName = addressRequest.addressName();
+        this.userId = addressRequest.userId();
         this.cep = addressRequest.cep();
         this.street = addressRequest.street();
         this.adjunct = addressRequest.adjunct();
@@ -67,7 +68,7 @@ public class Address {
             this.adjunct = addressUpdate.adjunct();
         }
 
-        if (addressUpdate.number() != 0) {
+        if (addressUpdate.number() != null) {
             this.number = addressUpdate.number();
         }
 

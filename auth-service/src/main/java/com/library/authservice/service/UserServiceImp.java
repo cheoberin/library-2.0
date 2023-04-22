@@ -1,5 +1,6 @@
 package com.library.authservice.service;
 
+import com.library.authservice.dto.UserResponse;
 import com.library.authservice.exceptions.ObjectNotFoundException;
 import com.library.authservice.model.Role;
 import com.library.authservice.model.User;
@@ -56,17 +57,17 @@ public class UserServiceImp implements UserService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found in the database"));
 
-        Role role = roleRepository.findByName(roleName);
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new UsernameNotFoundException("Role not found in the database"));
 
         user.getRoles().add(role);
         userRepository.save(user);
     }
 
     @Override
-    public User getUser(String username) {
+    public UserResponse getUser(String username) {
        Optional<User> user = userRepository.findByEmail(username);
-
-       return user.orElseThrow(() -> new UsernameNotFoundException("User not found in the database"));
+        return new UserResponse(user.orElseThrow(() -> new UsernameNotFoundException("User not found in the database")));
     }
 
 
@@ -78,9 +79,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<UserResponse> getUsers() {
         log.info("Fetching all users");
-        return userRepository.findAll();
+        return userRepository.findAll().stream().map(UserResponse::new).toList();
     }
 
     @Override
@@ -90,14 +91,15 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void deleteUser(String username) {
-        User user = this.getUser(username);
-        userRepository.delete(user);
+        UserResponse user = this.getUser(username);
+        userRepository.deleteById(user._id());
         log.info("Role {} deleted", username);
     }
 
     @Override
     public void deleteRole(String roleName) {
-        Role role = roleRepository.findByName(roleName);
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new UsernameNotFoundException("Role not found in the database"));
         roleRepository.delete(role);
         log.info("Role {} deleted", roleName);
     }

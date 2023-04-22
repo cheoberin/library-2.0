@@ -30,6 +30,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -66,11 +67,10 @@ public class BookService {
                 throw new DuplicateKeyException("Duplicate Field: " + exception.getMessage(), exception);
             }
         }
-
         return bookDetails;
     }
 
-
+    @Cacheable(keyGenerator = "customKeyGenerator")
     public List<BookResponse> findAll() {
         List<Book> books = bookRepository.findAll();
         log.info("Book's list returned");

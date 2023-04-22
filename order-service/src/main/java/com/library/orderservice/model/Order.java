@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -26,18 +28,21 @@ public class Order {
     @NotBlank
     private String status;
     @NotBlank
+    @Indexed
+    private String orderNumber;
+    @NotBlank
     private String phone;
-    @NotNull
+    @DBRef
     private Address address;
     @NotNull
-    private List<OrderBook> orderBookList;
+    @DBRef
+    private List<OrderItems> orderItemsList;
 
     public Order(OrderRequest orderRequest) {
         this.customerId = orderRequest.customerId();
         this.customerName = orderRequest.customerName();
         this.phone = orderRequest.phone();
-        this.address = orderRequest.address();
-        this.orderBookList = orderRequest.orderBookList();
+        this.status = orderRequest.status();
     }
 
     public void update(){

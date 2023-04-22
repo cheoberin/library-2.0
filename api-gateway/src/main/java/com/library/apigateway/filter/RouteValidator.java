@@ -18,7 +18,8 @@ public class RouteValidator {
             "/api/author",
             "/api/genre",
             "/api/publisher",
-            "/api/address"
+            "/api/address",
+            "/api/inventory"
     );
 
     public static final List<String> postEndpoints = List.of(

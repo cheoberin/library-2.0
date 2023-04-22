@@ -53,6 +53,10 @@ public class BookController {
         return ResponseEntity.ok().body(bookDetails);
     }
 
+    @GetMapping("/findall")
+    public ResponseEntity<List<BookResponse>>findAll(){
+       return ResponseEntity.ok().body(bookService.findAll());
+    }
     @GetMapping
     public ResponseEntity<Page<BookResponse>> findByFilters(@RequestParam(required = false) List<String> authorIds,
                                                             @RequestParam(required = false) List<String> genreIds,

@@ -7,6 +7,7 @@ import com.library.authservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,8 +29,16 @@ public class DbService {
                role.save(emp);
                role.save(cos);
 
-               userService.saveUser(new User(null, "Admin", "admin@hotmail.com", "123456", List.of(adm,emp)));
-
+              userService.saveUser(new User(
+                      null,
+                       "Admin Silva",
+                        new Date(1990,5,12),
+                        "123.456.789-00",
+                        "(11) 99999-9999",
+                        "admin@hotmail.com",
+                        "Senha123456",
+                        List.of(adm,emp)
+               ));
 
 //        userService.saveUser(new User(null, "Admin", "admin@hotmail.com", "123456", new ArrayList<>()));
 //        userService.saveUser(new User(null, "Juliano Teste", "teste@teste.com", "123456", new ArrayList<>()));
