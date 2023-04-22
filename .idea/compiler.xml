@@ -12,6 +12,7 @@
         <module name="discovery-server" />
         <module name="order-service" />
         <module name="book-service" />
+        <module name="email-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -24,6 +25,7 @@
       <module name="auth-service" options="-parameters" />
       <module name="book-service" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
+      <module name="email-service" options="-parameters" />
       <module name="order-service" options="-parameters" />
     </option>
   </component>

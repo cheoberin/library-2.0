@@ -30,6 +30,9 @@ public class UserServiceImp implements UserService {
     public User saveUser(User user) {
         log.info("Saving new user {} to the database...", user.getName());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+
+
         return userRepository.save(user);
     }
 
