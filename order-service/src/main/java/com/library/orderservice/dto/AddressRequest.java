@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public record AddressRequest(
         @NotBlank
+        String userID,
+        @NotBlank
         String addressName,
         @NotBlank
         String userId,
