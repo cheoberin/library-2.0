@@ -8,6 +8,7 @@ import com.library.authservice.repository.RoleRepository;
 import com.library.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,6 @@ public class UserServiceImp implements UserService {
     public User saveUser(User user) {
         log.info("Saving new user {} to the database...", user.getName());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-
-
         return userRepository.save(user);
     }
 
@@ -69,7 +67,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserResponse getUser(String username) {
-       Optional<User> user = userRepository.findByEmail(username);
+        Optional<User> user = userRepository.findByEmail(username);
         return new UserResponse(user.orElseThrow(() -> new UsernameNotFoundException("User not found in the database")));
     }
 

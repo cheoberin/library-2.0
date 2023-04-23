@@ -1,7 +1,9 @@
 package com.springhow.examples.springbootemailthymeleaf.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class User {
+@JsonSerialize
+public class UserAMQPDTO {
     private String username;
     private String name;
     private String email;
