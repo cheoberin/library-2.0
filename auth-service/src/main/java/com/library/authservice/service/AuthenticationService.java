@@ -45,7 +45,6 @@ public class AuthenticationService {
         userRepository.save(user);
 
         UserAMQPDTO userAMQPDTO = new UserAMQPDTO(request.getEmail(), request.getName(), request.getEmail());
-        System.out.println(request.getName() + " " + request.getEmail());
         rabbitTemplate.convertAndSend("amq.direct", "ms.email", userAMQPDTO);
 
         var jwtToken = jwtService.generateToken(user);

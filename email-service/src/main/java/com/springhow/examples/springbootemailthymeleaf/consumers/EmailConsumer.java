@@ -16,7 +16,6 @@ public class EmailConsumer {
 
     @RabbitListener(queues = "${spring.rabbitmq.queue}")
     public void listen(@Payload UserAMQPDTO userAMQPDTO) throws MessagingException {
-        System.out.println(userAMQPDTO.getUsername() + " " + userAMQPDTO.getName() + " " + userAMQPDTO.getEmail());
         emailService.sendMail(userAMQPDTO);
     }
 
