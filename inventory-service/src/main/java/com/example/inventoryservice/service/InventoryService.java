@@ -2,9 +2,9 @@ package com.example.inventoryservice.service;
 
 import com.example.inventoryservice.dto.InventoryDetails;
 import com.example.inventoryservice.dto.InventoryResponse;
+import com.example.inventoryservice.exceptions.NotFoundException;
 import com.example.inventoryservice.model.Inventory;
 import com.example.inventoryservice.repository.InventoryRespository;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,16 +20,14 @@ public class InventoryService {
 
     @Transactional(readOnly = true)
     public List<InventoryResponse> isInStock(List<String> bookIds){
-        log.info("chegou até aqui : {}",bookIds);
         return inventoryRespository.findByBookIdIn(bookIds)
                 .stream()
                 .map(inventory ->
                     InventoryResponse.builder()
                             .bookId(inventory.getBookId())
-                            .isInStock(inventory.getQuantity()> 0)
+                            .isInStock(inventory.getQuantity() > 0)
                             .build()
                 ).toList();
-
     }
 
     public InventoryDetails findByBookId(String bookId){

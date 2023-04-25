@@ -1,5 +1,6 @@
 package com.library.orderservice.service;
 
+import com.library.orderservice.dto.InventoryResponse;
 import com.library.orderservice.dto.OrderDetails;
 import com.library.orderservice.dto.OrderRequest;
 import com.library.orderservice.dto.OrderResponse;
@@ -12,19 +13,23 @@ import com.library.orderservice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class OrderService {
     private final OrderRepository orderRepository;
     private final AddressRepository addressRepository;
     private final OrderItemsService orderItemsService;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientbuilder;
 
     public OrderDetails placeOrder(OrderRequest orderRequest){
         log.info("order, {}", orderRequest);
@@ -38,35 +43,31 @@ public class OrderService {
         order.setAddress(adress);
         order.setOrderNumber(UUID.randomUUID().toString());
 
-        List<String> bookIds = order.getOrderItemsList()
+        /*List<String> bookIds = order.getOrderItemsList()
                 .stream()
                 .map(OrderItems::getBookId)
                 .toList();
 
-        boolean allProductsinStock;
 
-        /*try {
-            InventoryResponse[] inventoryResponsesArray = webClient.get()
-                    .uri("http://localhost:8090/api/inventory",
-                            uriBuilder -> uriBuilder.queryParam("bookIds", bookIds).build())
+
+
+            String bookIdsParam = String.join(",", bookIds);
+            InventoryResponse[] inventoryResponsesArray = webClientbuilder.build().get()
+                    .uri("http://inventory-service/api/inventory/?bookIds={bookIds}",
+                            bookIdsParam)
                     .retrieve()
                     .bodyToMono(InventoryResponse[].class)
                     .block();
 
-            allProductsinStock = Arrays.stream(Objects.requireNonNull(inventoryResponsesArray)).allMatch(InventoryResponse::isInStock);
-            log.info("deu certo ");
-        }catch (Exception e){
-            throw new NotFoundException(e.getMessage());
-        }*/
-
-
-
-
+            boolean allProductsinStock = Arrays.stream(inventoryResponsesArray).allMatch(InventoryResponse::isInStock);
+            System.out.println(Arrays.toString(inventoryResponsesArray));
+            log.info("deu certo 1:{}",allProductsinStock);
+        */
 
         //if(allProductsinStock) {
             return new OrderDetails(orderRepository.save(order));
         //}else {
-            //throw new NotFoundException("product is not in stock");
+         //   throw new NotFoundException("product is not in stock");
         //}
 
     }
