@@ -1,10 +1,7 @@
 package com.library.authservice;
 
-import com.library.authservice.service.DbService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
 @EnableMongoAuditing

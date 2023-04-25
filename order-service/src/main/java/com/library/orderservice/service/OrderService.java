@@ -1,6 +1,5 @@
 package com.library.orderservice.service;
 
-import com.library.orderservice.dto.InventoryResponse;
 import com.library.orderservice.dto.OrderDetails;
 import com.library.orderservice.dto.OrderRequest;
 import com.library.orderservice.dto.OrderResponse;
@@ -15,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -28,8 +25,9 @@ public class OrderService {
     private final AddressRepository addressRepository;
     private final OrderItemsService orderItemsService;
     private final WebClient webClient;
-    public OrderDetails placeOrder(OrderRequest orderRequest){
 
+    public OrderDetails placeOrder(OrderRequest orderRequest){
+        log.info("order, {}", orderRequest);
         Order order = new Order(orderRequest);
         Address adress = addressRepository.findById(orderRequest.addressId())
                 .orElseThrow(() -> new NotFoundException("Address: " + orderRequest.addressId() + " Not found"));
@@ -44,9 +42,10 @@ public class OrderService {
                 .stream()
                 .map(OrderItems::getBookId)
                 .toList();
+
         boolean allProductsinStock;
 
-        try {
+        /*try {
             InventoryResponse[] inventoryResponsesArray = webClient.get()
                     .uri("http://localhost:8090/api/inventory",
                             uriBuilder -> uriBuilder.queryParam("bookIds", bookIds).build())
@@ -55,18 +54,20 @@ public class OrderService {
                     .block();
 
             allProductsinStock = Arrays.stream(Objects.requireNonNull(inventoryResponsesArray)).allMatch(InventoryResponse::isInStock);
-
+            log.info("deu certo ");
         }catch (Exception e){
             throw new NotFoundException(e.getMessage());
-        }
+        }*/
 
 
 
-        if(allProductsinStock) {
+
+
+        //if(allProductsinStock) {
             return new OrderDetails(orderRepository.save(order));
-        }else {
-            throw new NotFoundException("product is not in stock");
-        }
+        //}else {
+            //throw new NotFoundException("product is not in stock");
+        //}
 
     }
     public OrderDetails getOrder(String ordernumber){
@@ -79,4 +80,10 @@ public class OrderService {
         return orders.stream().map(OrderResponse::new).toList();
     }
 
+    public List<OrderDetails> getOrderbyUserId(String userId){
+        List<Order> orders = orderRepository.findOrdersByCustomerId(userId).orElseThrow(
+                () -> new NotFoundException("Order: " + userId + " Not found"));
+        return orders.stream().map(OrderDetails::new).toList();
+
+    }
 }

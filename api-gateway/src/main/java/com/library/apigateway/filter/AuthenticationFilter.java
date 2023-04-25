@@ -85,7 +85,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     }
                 }
 
-                if (exchange.getRequest().getPath().toString().equals("/api/orderbook")) {
+                if (exchange.getRequest().getPath().toString().equals("/api/order")||exchange.getRequest().getPath().toString().equals("/api/address")) {
                     hasRole = CollectionUtils.containsAny(roles, ROLES_CUSTOMER_ONLY);
                 }
 

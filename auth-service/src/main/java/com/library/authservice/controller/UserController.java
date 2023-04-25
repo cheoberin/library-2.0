@@ -1,5 +1,6 @@
 package com.library.authservice.controller;
 
+import com.library.authservice.dto.UserDtoDetails;
 import com.library.authservice.dto.UserResponse;
 import com.library.authservice.model.User;
 import com.library.authservice.service.UserService;
@@ -28,8 +29,8 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'ADMIN', 'EMPLOYEE')")
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable String id) {
-        User user = userService.findById(id);
+    public ResponseEntity<UserDtoDetails> findById(@PathVariable String id) {
+        UserDtoDetails user = userService.findById(id);
         return ResponseEntity.ok().body(user);
     }
 

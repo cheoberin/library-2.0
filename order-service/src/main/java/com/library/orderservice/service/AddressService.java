@@ -55,4 +55,9 @@ public class AddressService {
         return new AddressDetails(address);
     }
 
+    public List<AddressDetails> findByUserId(String id){
+        List<Address> addresses = addressRepository.findAddressesByUserId(id).orElseThrow(()-> new NotFoundException("Object not found: " + id));
+        return addresses.stream().map(AddressDetails::new).toList();
+    }
+
 }

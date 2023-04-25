@@ -10,4 +10,14 @@ public class OrderServiceApplication {
 		SpringApplication.run(OrderServiceApplication.class, args);
 	}
 
+
+	/* @Autowired
+    private DbService dbService;
+    @Bean
+    public void initDb() {
+        dbService.dbInit();
+
+    }*/
+
+
 }

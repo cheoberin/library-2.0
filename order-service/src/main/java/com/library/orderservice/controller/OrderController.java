@@ -18,7 +18,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-
     @PostMapping
     public ResponseEntity<OrderDetails> placeOrder(@RequestBody OrderRequest orderRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.placeOrder(orderRequest));
@@ -27,6 +26,10 @@ public class OrderController {
     @GetMapping("/{orderNumber}")
     public ResponseEntity<OrderDetails> getOrder(@PathVariable String orderNumber){
         return ResponseEntity.ok().body(orderService.getOrder(orderNumber));
+    }
+    @GetMapping("/")
+    public ResponseEntity<List<OrderDetails>> getOrderByUserId(@RequestParam String userId){
+        return ResponseEntity.ok().body(orderService.getOrderbyUserId(userId));
     }
 
     @GetMapping

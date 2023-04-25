@@ -1,5 +1,6 @@
 package com.library.authservice.service;
 
+import com.library.authservice.dto.UserDtoDetails;
 import com.library.authservice.dto.UserResponse;
 import com.library.authservice.model.Role;
 import com.library.authservice.model.User;
@@ -14,7 +15,7 @@ public interface UserService {
     User updateUser(User user);
     void addRoleToUser(String username, String roleName);
     UserResponse getUser(String username);
-    User findById(String id);
+    UserDtoDetails findById(String id);
     List<UserResponse> getUsers();
     List<Role> getRoles();
     void deleteUser(String username);

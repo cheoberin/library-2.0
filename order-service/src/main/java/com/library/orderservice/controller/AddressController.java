@@ -7,6 +7,7 @@ import com.library.orderservice.dto.AddressUpdate;
 import com.library.orderservice.service.AddressService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -17,12 +18,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/address")
+@Slf4j
 public class AddressController {
 
     private final AddressService addressService;
 
     @PostMapping
     public ResponseEntity create(@RequestBody @Valid AddressRequest addressRequest, UriComponentsBuilder uriComponentsBuilder) {
+        log.info("recebidooo: {}",addressRequest);
         AddressDetails addressDetails = addressService.save(addressRequest);
         URI uri = uriComponentsBuilder.path("/api/address/{id}").buildAndExpand(addressDetails._id()).toUri();
         return ResponseEntity.created(uri).body(addressDetails);
@@ -51,5 +54,13 @@ public class AddressController {
         AddressDetails addressDetails = addressService.update(addressUpdate);
         return ResponseEntity.ok().body(addressDetails);
     }
+
+    @GetMapping("/")
+    public ResponseEntity findByuserId(@RequestParam String userId) {
+        log.info("user is : {}",userId);
+        List<AddressDetails> addressDetails = addressService.findByUserId(userId);
+        return ResponseEntity.ok().body(addressDetails);
+    }
+
 
 }

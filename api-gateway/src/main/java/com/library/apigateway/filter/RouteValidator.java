@@ -18,7 +18,6 @@ public class RouteValidator {
             "/api/author",
             "/api/genre",
             "/api/publisher",
-            "/api/address",
             "/api/inventory"
     );
 

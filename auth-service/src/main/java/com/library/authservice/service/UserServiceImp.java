@@ -1,5 +1,6 @@
 package com.library.authservice.service;
 
+import com.library.authservice.dto.UserDtoDetails;
 import com.library.authservice.dto.UserResponse;
 import com.library.authservice.exceptions.ObjectNotFoundException;
 import com.library.authservice.model.Role;
@@ -44,7 +45,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User updateUser(User user) {
-        User userOriginal = this.findById(user.get_id());
+        User userOriginal = userRepository.findById(user.get_id()).orElseThrow(() -> new ObjectNotFoundException("user not found"));
         userOriginal.setPassword(user.getPassword());
         userOriginal.setName(user.getName());
         userOriginal.setRoles(user.getRoles());
@@ -75,10 +76,10 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public User findById(String id) {
+    public UserDtoDetails findById(String id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new ObjectNotFoundException("Object not Found: " + id + " , type: " +
-                User.class.getName()));
+        return new UserDtoDetails(user.orElseThrow(() -> new ObjectNotFoundException("Object not Found: " + id + " , type: " +
+                User.class.getName())));
     }
 
     @Override

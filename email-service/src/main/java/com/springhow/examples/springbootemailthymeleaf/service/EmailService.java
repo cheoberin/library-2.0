@@ -1,7 +1,6 @@
 package com.springhow.examples.springbootemailthymeleaf.service;
 
 import com.springhow.examples.springbootemailthymeleaf.model.User;
-
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
