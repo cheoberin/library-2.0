@@ -1,10 +1,12 @@
 package com.library.authservice.service;
 
+import com.library.authservice.dto.UserAMQPDTO;
 import com.library.authservice.exceptions.ObjectNotFoundException;
 import com.library.authservice.model.*;
 import com.library.authservice.repository.RoleRepository;
 import com.library.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,12 +18,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private static final String  ROLE_NAME = "CUSTOMER";
+    private static final String ROLE_NAME = "CUSTOMER";
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RabbitTemplate rabbitTemplate;
+
     public AuthenticationResponse register(RegisterRequest request) {
 
         Role role = roleRepository.findByName(ROLE_NAME).orElseThrow(
@@ -39,6 +43,9 @@ public class AuthenticationService {
                 .build();
 
         userRepository.save(user);
+
+        UserAMQPDTO userAMQPDTO = new UserAMQPDTO(request.getEmail(), request.getName(), request.getEmail());
+        rabbitTemplate.convertAndSend("amq.direct", "ms.email", userAMQPDTO);
 
         var jwtToken = jwtService.generateToken(user);
 

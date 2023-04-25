@@ -1,6 +1,6 @@
 package com.springhow.examples.springbootemailthymeleaf.controllers;
 
-import com.springhow.examples.springbootemailthymeleaf.model.User;
+import com.springhow.examples.springbootemailthymeleaf.model.UserAMQPDTO;
 import com.springhow.examples.springbootemailthymeleaf.service.EmailService;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Controller;
@@ -22,8 +22,8 @@ public class EmailController {
 
     @PostMapping("register")
     @ResponseBody
-    public String register(@RequestBody User user) throws MessagingException {
-        emailService.sendMail(user);
+    public String register(@RequestBody UserAMQPDTO userAMQPDTO) throws MessagingException {
+        emailService.sendMail(userAMQPDTO);
         return "Email Sent Successfully.!";
     }
 
