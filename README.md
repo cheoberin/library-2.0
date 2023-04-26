@@ -35,5 +35,13 @@ Repositorio back-end antigo
 
 [![card](https://github-readme-stats.vercel.app/api/pin/?username=cheoberin&repo=library-project)](https://github.com/cheoberin/library-project)
 
+## ☁️ On cloud
+Os dois front ends desta apliciação estão disponiveis para acesso nestes links
 
+- https://library-stock.azurewebsites.net Front for Enterprise
+
+- https://library-jwba.azurewebsites.net Front for Shopping
+
+Lembrando que para os front-ends funcionarem corretamente no momento esta aplicação backend deve estar rodando localmente!
+ 
 [⬆ Voltar ao topo](#nome-do-projeto)<br>
