@@ -34,7 +34,6 @@ public class BookController {
         return ResponseEntity.created(uri).body(bookDetails);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<BookDetails> delete(@PathVariable String id) {
         bookService.delete(id);
@@ -57,6 +56,7 @@ public class BookController {
     public ResponseEntity<List<BookResponse>>findAll(){
        return ResponseEntity.ok().body(bookService.findAll());
     }
+
     @GetMapping
     public ResponseEntity<Page<BookResponse>> findByFilters(@RequestParam(required = false) List<String> authorIds,
                                                             @RequestParam(required = false) List<String> genreIds,

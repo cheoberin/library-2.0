@@ -43,7 +43,7 @@ public class OrderService {
         order.setAddress(adress);
         order.setOrderNumber(UUID.randomUUID().toString());
 
-        /*List<String> bookIds = order.getOrderItemsList()
+        List<String> bookIds = order.getOrderItemsList()
                 .stream()
                 .map(OrderItems::getBookId)
                 .toList();
@@ -62,13 +62,13 @@ public class OrderService {
             boolean allProductsinStock = Arrays.stream(inventoryResponsesArray).allMatch(InventoryResponse::isInStock);
             System.out.println(Arrays.toString(inventoryResponsesArray));
             log.info("deu certo 1:{}",allProductsinStock);
-        */
 
-        //if(allProductsinStock) {
+
+        if(allProductsinStock) {
             return new OrderDetails(orderRepository.save(order));
-        //}else {
-         //   throw new NotFoundException("product is not in stock");
-        //}
+        }else {
+            throw new NotFoundException("product is not in stock");
+        }
 
     }
     public OrderDetails getOrder(String ordernumber){
